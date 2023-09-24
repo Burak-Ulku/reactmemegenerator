@@ -1,72 +1,58 @@
-import './App.css';
-import React, { useEffect, useState } from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
 
-const MemeGenerator = () => {
+function MemeGenerator() {
   const [topText, setTopText] = useState('');
   const [bottomText, setBottomText] = useState('');
-  const [memeTemplate, setMemeTemplate] = useState('doge');
-  const [memeImageUrl, setMemeImageUrl] = useState('');
+  const [template, setTemplate] = useState(''); // Store the meme template URL here
 
-  useEffect(() => {
-    // Fetch the meme image URL when the component mounts
-    fetchMemeImage();
-  }, [memeTemplate]);
-
-  const fetchMemeImage = () => {
-    // Use memegen.link API to fetch meme image
-    const apiUrl = `https://api.memegen.link/images/${memeTemplate}/${topText}/${bottomText}.png`;
-    setMemeImageUrl(apiUrl);
+  const handleTemplateChange = (e) => {
+    setTemplate(e.target.value);
   };
 
-  const handleTemplateChange = (event) => {
-    setMemeTemplate(event.target.value);
-    setTopText('');
-    setBottomText('');
-  };
+  const handleGenerateMeme = () => {
+    // Construct the meme URL using meme template, topText, and bottomText
+    const memeUrl = `https://memegen.link/${template}/${topText}/${bottomText}.jpg`;
 
-  const handleDownloadClick = () => {
-    // Implement the download functionality here
-    // You can use HTML5 <a> tag with the "download" attribute
+    // Logic to download or display the meme
+    // You can open the meme URL in a new tab or provide a download link
   };
 
   return (
     <div>
-      <h1>Meme Generator</h1>
-      <label htmlFor="topText">Top Text</label>
+      <label htmlFor="topText">Top text:</label>
       <input
         type="text"
         id="topText"
         value={topText}
         onChange={(e) => setTopText(e.target.value)}
       />
-      <label htmlFor="bottomText">Bottom Text</label>
+
+      <label htmlFor="bottomText">Bottom text:</label>
       <input
         type="text"
         id="bottomText"
         value={bottomText}
         onChange={(e) => setBottomText(e.target.value)}
       />
-      <div>
-        <label htmlFor="memeTemplate">Meme Template</label>
-        <input
-          type="text"
-          id="memeTemplate"
-          value={memeTemplate}
-          onChange={handleTemplateChange}
-        />
-      </div>
-      <div>
-        <img
-          src={memeImageUrl}
-          alt="Meme"
-          data-test-id="meme-image"
-          onError={() => setMemeImageUrl('')} // Handle image load errors
-        />
-      </div>
-      <button onClick={handleDownloadClick}>Download</button>
+
+      <label htmlFor="memeTemplate">Meme template:</label>
+      <input
+        type="text"
+        id="memeTemplate"
+        value={template}
+        onChange={handleTemplateChange}
+      />
+
+      <button onClick={handleGenerateMeme}>Generate Meme</button>
+
+      {/* Display the meme preview */}
+      <img
+        src={`https://memegen.link/${template}/${topText}/${bottomText}.jpg`}
+        alt="Meme Preview"
+        data-test-id="meme-image"
+      />
     </div>
   );
-};
+}
 
 export default MemeGenerator;
